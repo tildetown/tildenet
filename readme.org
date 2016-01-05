@@ -7,8 +7,8 @@ service. Decentralization (federation) should be possible, but not required to
 support a user load in the thousands.
 
 to this end, tildenet decouples HTTP requests from HTML generation. To the
-extent that it is possible, tildenet statically publishes HTML pages as users
-mutate the system.
+extent that it is possible, tildenet statically publishes HTML pages in the
+background as users mutate the system.
 
 much like a regular, dynamic web application, tildenet manages state in an
 RDBMS. This state is the source of truth; at any point, the entire set of HTML
@@ -22,10 +22,6 @@ with basic manual dependency checking.
 to the extent that it is possible, tildenet should not rely on any kind of js
 framework.
 
-
-*** the features that js will support are:
-**** testing out css tweaks on-page for users' pages
-**** alert users to updates
 
 *** features
 **** page per user
@@ -63,6 +59,14 @@ off. Moreover, having a local identity is important for community spirit.
 
 in general, a design principle for now in tildenet is to not preclude federation
 but not to focus on it as a launch feature.
+
+**** what will js be used for?
+styling users' pages live and reflecting that users have changed state (even if
+it hasn't been publish as HTML yet).
+
+**** testing out css tweaks on-page for users' pages
+**** alert users to updates
+
 
 ** tooling
 
