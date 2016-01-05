@@ -1,0 +1,92 @@
+* tildenet
+
+** high level design
+
+tildenet should be as low cost as possible while still remaining a centralized
+service. Decentralization (federation) should be possible, but not required to
+support a user load in the thousands.
+
+to this end, tildenet decouples HTTP requests from HTML generation. To the
+extent that it is possible, tildenet statically publishes HTML pages as users
+mutate the system.
+
+much like a regular, dynamic web application, tildenet manages state in an
+RDBMS. This state is the source of truth; at any point, the entire set of HTML
+pages must be deletable and recreated.
+
+javascript must be used sparingly; it is never the goal of tildenet to become a
+"javascript app." however, this does not mean js spaghetti or sloppy js
+engineering. instead, it means writing small composable js objects in vanilla js
+with basic manual dependency checking.
+
+to the extent that it is possible, tildenet should not rely on any kind of js
+framework.
+
+
+*** the features that js will support are:
+**** testing out css tweaks on-page for users' pages
+**** alert users to updates
+
+*** features
+**** page per user
+**** ability to post messages on a user's wall
+**** ability to tag other users in messages
+**** general activity feed
+**** public or private pages
+**** ability to customize the content and style of your page
+
+*** questions and answers
+**** will there be chat?
+No. Chat and private messaging takes place on the server.
+
+**** why not store everything as flat file?
+This is possible, but hampers interesting features. Ultimately, the data that is
+interesting is first class in the database and the HTML is but one possible
+representation. We also want to be able to expose this data with other tools
+(possibly CLI). This is normally accomplished with an HTTP API but since we're
+decoupling HTTP from HTML generation, an API is not a given without extra
+architecture.
+
+**** what about authentication?
+User's browsers will store a private key they generate themselves. this can be
+regenerated at any time using a one-time code generated from the CLI on the
+server.
+
+The private key will be used to solve a challenge that results in a secure
+cookie being used.
+
+**** why not federated-first?
+Federation is great, but hard. The tilde movement started out with dreams of
+federation and quickly realized how hard it is. Solving this provlem is not just
+technical, but requires collaboration between volunteers and is hard to pull
+off. Moreover, having a local identity is important for community spirit.
+
+in general, a design principle for now in tildenet is to not preclude federation
+but not to focus on it as a launch feature.
+
+** tooling
+
+tildenet is a python project. tildenet uses python because of its
+approachability and accessibility. specifically, tildenet uses python 3.4+ to
+take advantage of the ProcessPoolExecutor to power its async core.
+
+database modelling will use peewee.
+
+tildenet uses postgres as its state store and has no intention of ever
+supporting another RDBMS.
+
+tildenet serves its static html using nginx.
+
+tildenet uses vanilla JS without a framework. for js crypto, it uses a library
+called forge.
+** development plan
+work on tildenet is tracked via a trello board in a fine grained fashion, but
+here is a very rough plan for the path development will take:
+
+*** basic user model and routes for authentication
+*** key generation with corresponding server-side secret tool
+*** page model with skin customization
+*** HTML compilation
+*** page comments and HTML recompilation
+*** activity feed
+*** final stylings
